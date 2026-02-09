@@ -1,6 +1,6 @@
 # Kalshi Arbitrage Bot - Foundation Framework
 
-> **A production-ready foundation for building profitable algorithmic trading bots on Kalshi prediction markets.**
+> **Kalshi Arbitrage Bot on Kalshi.**
 ---
 
 ## What this Provides
