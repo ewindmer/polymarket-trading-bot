@@ -1,4 +1,4 @@
-# Polymarekt Arbitrage Trading Strategies
+# Polymarekt Trading Strategies
 
 This polymarket arbitrage trading bot utilizes the five arbitrage strategies implemented in the bot.
 
