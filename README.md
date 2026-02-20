@@ -6,7 +6,7 @@ This polymarket arbitrage trading bot utilizes the five arbitrage strategies imp
 
 The polymarket arbitrage trading bot uses multiple strategies to identify arbitrage opportunities on Polymarket prediction markets. Each strategy targets different market inefficiencies and operates across multiple timeframes (5m, 15m, 1h).
 
-## For consulting with strategies and purchase, contact me at [@roswellecho](https://t.me/roswellecho)
+## For consulting with strategies and purchase, contact me at [@ewindmer](https://t.me/ewindmer)
 
 ## Strategy 1: Intra-Market Arbitrage
 
