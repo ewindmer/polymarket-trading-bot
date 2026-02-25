@@ -24,7 +24,6 @@ logger = logging.getLogger("polymarket_arb")
 
 
 class PolymarketClient:
-    """Polymarket CLOB API client."""
 
     def __init__(self):
         self.base_url = CLOB_API_URL
@@ -64,7 +63,6 @@ class PolymarketClient:
         }
 
     async def _rate_limit(self):
-        """Enforce rate limiting."""
         now = time.time()
         elapsed = now - self._last_request_time
         if elapsed < self._min_request_interval:
@@ -109,14 +107,12 @@ class PolymarketClient:
 
     # Market discovery
     async def get_markets(self, next_cursor: str = "") -> Dict:
-        """Fetch all active markets from the CLOB API."""
         params = {"active": "true"}
         if next_cursor:
             params["next_cursor"] = next_cursor
         return await self._get("/markets", params)
 
     async def search_gamma_markets(self, query: str) -> List[Dict]:
-        """Search for markets via the Gamma API (richer metadata)."""
         await self._ensure_session()
         url = f"{self.gamma_url}/markets"
         params = {"closed": "false", "limit": 50}
@@ -137,7 +133,6 @@ class PolymarketClient:
             return []
 
     async def discover_crypto_markets(self) -> Dict[str, List[Dict]]:
-        """Discover all active crypto prediction markets for our target assets."""
         crypto_markets = {asset: [] for asset in CRYPTO_ASSETS}
         for asset, keywords in MARKET_SEARCH_KEYWORDS.items():
             for keyword in keywords:
@@ -153,27 +148,22 @@ class PolymarketClient:
 
     # Order book
     async def get_order_book(self, token_id: str) -> Optional[Dict]:
-        """Get the full order book for a token."""
         return await self._get(f"/book", {"token_id": token_id})
 
     async def get_midpoint(self, token_id: str) -> Optional[float]:
-        """Get the midpoint price for a token."""
         data = await self._get(f"/midpoint", {"token_id": token_id})
         if data and "mid" in data:
             return float(data["mid"])
         return None
 
     async def get_price(self, token_id: str) -> Optional[Dict]:
-        """Get best bid/ask for a token."""
         data = await self._get(f"/price", {"token_id": token_id})
         return data
 
     async def get_spread(self, token_id: str) -> Optional[Dict]:
-        """Get the bid-ask spread for a token."""
         return await self._get(f"/spread", {"token_id": token_id})
 
     async def get_prices_for_market(self, condition_id: str) -> Dict[str, Dict]:
-        """Get YES and NO prices for a binary market."""
         market = await self._get(f"/markets/{condition_id}")
         if not market:
             return {}
@@ -201,7 +191,6 @@ class PolymarketClient:
         size: float,
         order_type: str = ORDER_TYPE,
     ) -> Optional[Dict]:
-        """Place an order on the CLOB."""
         if DRY_RUN:
             logger.info(f"[DRY RUN] Order: {side} {size:.2f} @ ${price:.4f} "
                         f"token={token_id[:16]}... type={order_type}")
@@ -230,7 +219,6 @@ class PolymarketClient:
         side: str,
         amount_usd: float,
     ) -> Optional[Dict]:
-        """Place a market order (FOK at best available price)."""
         book = await self.get_order_book(token_id)
         if not book:
             return None
@@ -253,20 +241,16 @@ class PolymarketClient:
         return await self.place_order(token_id, side, price, size, "FOK")
 
     async def cancel_order(self, order_id: str) -> Optional[Dict]:
-        """Cancel an active order."""
         if DRY_RUN:
             logger.info(f"[DRY RUN] Cancel order: {order_id}")
             return {"status": "CANCELLED"}
         return await self._post(f"/cancel", {"orderID": order_id})
 
     async def get_open_orders(self) -> List[Dict]:
-        """Get all open orders."""
         data = await self._get("/orders/active")
         return data if data else []
 
     async def get_balance(self) -> float:
-        """Get USDC balance (simplified)."""
-        # In production, query the Polygon USDC contract directly
         data = await self._get("/balances")
         if data and "balance" in data:
             return float(data["balance"])
@@ -278,7 +262,6 @@ class PolymarketClient:
         token_ids: List[str],
         callback,
     ):
-        """Subscribe to real-time order book updates via WebSocket."""
         while True:
             try:
                 async with websockets.connect(WS_URL) as ws:
@@ -304,7 +287,6 @@ class PolymarketClient:
 
 
 class CrossPlatformFeeds:
-    """Fetch prices from Binance and CoinGecko."""
 
     COINGECKO_IDS = {
         "BTC": "bitcoin",
@@ -374,7 +356,6 @@ class CrossPlatformFeeds:
         return None
 
     async def get_all_prices(self) -> Dict[str, Dict]:
-        """Fetch prices for all crypto assets from multiple sources."""
         results = {}
         tasks = []
         for asset in CRYPTO_ASSETS:
@@ -386,7 +367,6 @@ class CrossPlatformFeeds:
         return results
 
     async def _fetch_asset_price(self, asset: str) -> Dict:
-        """Fetch price from Binance first, fallback to CoinGecko."""
         price = await self.get_binance_price(asset)
         source = "binance"
         if price is None:
@@ -400,7 +380,6 @@ class CrossPlatformFeeds:
         }
 
     def get_cached_price(self, asset: str, max_age_sec: int = 30) -> Optional[float]:
-        """Get cached price if fresh enough."""
         cached = self._price_cache.get(asset)
         if cached and (time.time() - cached["timestamp"]) < max_age_sec:
             return cached["price"]
