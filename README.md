@@ -8,7 +8,7 @@ The polymarket arbitrage trading bot uses multiple strategies to identify arbitr
 
 ## For consulting with strategies and purchase, contact me at [@ewindmer](https://t.me/ewindmer)
 
-<img width="1816" height="906" alt="wmremove-transformed (2)" src="https://github.com/user-attachments/assets/96cc0618-3995-4231-a319-5afb14b90839" />
+<img width="1905" height="1036" alt="wmremove-transformed (1)" src="https://github.com/user-attachments/assets/e8b89950-a672-47ca-8f6b-62a5d458e484" />
 
 ## Strategy 1: Intra-Market Arbitrage
 
