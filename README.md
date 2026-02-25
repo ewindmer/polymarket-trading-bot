@@ -8,6 +8,8 @@ The polymarket arbitrage trading bot uses multiple strategies to identify arbitr
 
 ## For consulting with strategies and purchase, contact me at [@ewindmer](https://t.me/ewindmer)
 
+<img width="1816" height="906" alt="wmremove-transformed (2)" src="https://github.com/user-attachments/assets/96cc0618-3995-4231-a319-5afb14b90839" />
+
 ## Strategy 1: Intra-Market Arbitrage
 
 In binary prediction markets, YES and NO tokens should always sum to $1.00. When the combined price of YES + NO is less than $1.00 (after fees), you can buy both outcomes and guarantee a profit.
